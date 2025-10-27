@@ -19,6 +19,7 @@ Offer 2–3 options with short descriptions and approximate prices.
 Be warm, concise, and helpful.
 """
 
+
 # ---- Fallback Answer (used if no LLM available) ----
 def fallback_answer(messages):
     user_text = messages[-1]["content"].lower()
@@ -30,6 +31,7 @@ def fallback_answer(messages):
         return "A **Peaceful Whites** arrangement (~$60) with lilies and roses conveys sympathy beautifully."
     return "I’d love to help! What’s the **occasion**, **budget**, and **delivery date/zip**?"
 
+
 def generate_reply(messages):
     # Ensure system prompt is the first message
     if messages[0]["role"] != "system":
@@ -39,12 +41,17 @@ def generate_reply(messages):
         return llm_get_answer(messages)  # uses your actual LLM
     return fallback_answer(messages)
 
+
 # ---- Initialize Session State ----
 if "messages" not in st.session_state:
     st.session_state.messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "assistant", "content": "Hi! I’m **BloomBot** 🌸 What’s the occasion and budget?"}
+        {
+            "role": "assistant",
+            "content": "Hi! I’m **BloomBot** 🌸 What’s the occasion and budget?",
+        },
     ]
+
 
 # ---- Reusable chat send function ----
 def send_message(text):
@@ -70,7 +77,9 @@ with st.sidebar:
     if st.button("🎉 Birthday under $50"):
         send_message("I need a birthday bouquet under $50. Bright colors.")
     if st.button("❤️ Anniversary (classic red)"):
-        send_message("Anniversary bouquet, classic red roses. Delivery Friday to 80302.")
+        send_message(
+            "Anniversary bouquet, classic red roses. Delivery Friday to 80302."
+        )
     if st.button("🕊️ Sympathy whites"):
         send_message("Sympathy arrangement in whites. Service on Tuesday.")
     st.markdown("---")

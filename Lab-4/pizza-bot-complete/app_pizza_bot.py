@@ -6,7 +6,10 @@ st.set_page_config(page_title="🍕 Pizza Shop Chatbot", page_icon="🍕")
 # ---------------- Session State ----------------
 if "messages" not in st.session_state:
     st.session_state.messages = [
-        {"role": "assistant", "content": "Hi! Welcome to **PizzaTime** 🍕 What kind of pizza would you like today?"}
+        {
+            "role": "assistant",
+            "content": "Hi! Welcome to **PizzaTime** 🍕 What kind of pizza would you like today?",
+        }
     ]
 
 if "order_details" not in st.session_state:
@@ -15,7 +18,7 @@ if "order_details" not in st.session_state:
         "size": None,
         "crust": None,
         "pickup_delivery": None,
-        "time": None
+        "time": None,
     }
 
 if "order_ready" not in st.session_state:
@@ -27,7 +30,8 @@ if "conversation_complete" not in st.session_state:
 
 # ---------------- Receipt UI ----------------
 def render_receipt(order):
-    st.markdown("""
+    st.markdown(
+        """
     <style>
     .receipt-box {
         border: 2px solid #444;
@@ -48,9 +52,12 @@ def render_receipt(order):
         margin: 6px 0;
     }
     </style>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
-    st.markdown(f"""
+    st.markdown(
+        f"""
     <div class="receipt-box">
         <div class="receipt-title">🍕 PIZZA ORDER RECEIPT 🍕</div>
         <div>Pizza: <strong>{order['type']}</strong></div>
@@ -62,7 +69,9 @@ def render_receipt(order):
         <div class="receipt-line"></div>
         <div style="text-align:center;">Thank you for your order! 😊</div>
     </div>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
 
 # ---------------- Order Logic ----------------
@@ -92,7 +101,9 @@ def fallback_answer(messages):
     if o["size"] is None:
         m = re.search(r"\b(small|medium|large|s|m|l)\b", last)
         if m:
-            o["size"] = {"s": "small", "m": "medium", "l": "large"}.get(m.group(), m.group())
+            o["size"] = {"s": "small", "m": "medium", "l": "large"}.get(
+                m.group(), m.group()
+            )
             return "Nice — and what crust would you like? (Thin / Regular / Pan)"
 
     # Crust
@@ -135,19 +146,31 @@ def check_close():
     if st.session_state.order_ready and "confirm" in last:
         st.session_state.order_ready = False
         st.session_state.conversation_complete = True
-        st.session_state.messages.append({
-            "role": "assistant",
-            "content": "🎉 Order confirmed! Would you like anything else?"
-        })
+        st.session_state.messages.append(
+            {
+                "role": "assistant",
+                "content": "🎉 Order confirmed! Would you like anything else?",
+            }
+        )
         return
 
     # End conversation & show receipt
-    if st.session_state.conversation_complete and last in ["no", "no thanks", "no thank you", "that's all", "done"]:
+    if st.session_state.conversation_complete and last in [
+        "no",
+        "no thanks",
+        "no thank you",
+        "that's all",
+        "done",
+    ]:
         o = st.session_state.order_details
-        st.session_state.messages.append({"role": "assistant", "content": "😊 Thank you! Here's your order summary:"})
+        st.session_state.messages.append(
+            {"role": "assistant", "content": "😊 Thank you! Here's your order summary:"}
+        )
         with st.chat_message("assistant"):
             render_receipt(o)
-        st.session_state.messages.append({"role": "assistant", "content": "Have a great day! 🍕"})
+        st.session_state.messages.append(
+            {"role": "assistant", "content": "Have a great day! 🍕"}
+        )
 
 
 # ---------------- UI Rendering ----------------

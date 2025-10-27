@@ -4,27 +4,24 @@ from dotenv import load_dotenv
 from openai import OpenAI
 
 
-
 # Installation reminders:
 # pip install openai python-dotenv
 
 
-#Load environment variables from .env (expects OPENAI_API_KEY)
+# Load environment variables from .env (expects OPENAI_API_KEY)
 load_dotenv()
 api_key = os.getenv("openai_api_key")  # must match variable name in .env file
 if not api_key:
     raise SystemExit("Missing openai_api_key. Put it in a .env file or export it.")
 
-#Initialize OpenAI client
+# Initialize OpenAI client
 client = OpenAI(api_key=api_key)
 
-#Conversation history (system message defines assistant behavior)
-messages = [
-    {"role": "system", "content": "You are a helpful, concise assistant."}
-]
+# Conversation history (system message defines assistant behavior)
+messages = [{"role": "system", "content": "You are a helpful, concise assistant."}]
 
-#https://platform.openai.com/chat
-#Themes for system messages:
+# https://platform.openai.com/chat
+# Themes for system messages:
 # {“role”: “system”, “content”: “You are a helpful assistant.”}
 # {“role”: “system”, “content”: “You are a cynical robot. You answer correctly but with a sarcastic and world-weary tone.”}
 # {“role”: “system”, “content”: “You are a helpful pirate captain. You answer all questions with pirate slang, calling the user ‘matey’ and ending with ‘Yarrr!'”}
@@ -41,10 +38,10 @@ messages = [
 
 print("Your AI assistant is ready. Type 'quit' to exit.\n")
 
-#Conversation loop
+# Conversation loop
 try:
     while True:
-        #Get user input
+        # Get user input
         user_input = input("You: ").strip()
         if user_input.lower() == "quit":
             break
@@ -66,10 +63,10 @@ try:
             print(f"Assistant (error): {e}")
             continue
 
-        #Print and store assistant reply
+        # Print and store assistant reply
         print(f"Assistant: {assistant_msg}\n")
         messages.append({"role": "assistant", "content": assistant_msg})
 
-#Graceful exit
+# Graceful exit
 except (KeyboardInterrupt, EOFError):
     print("\n Goodbye!")

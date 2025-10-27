@@ -6,7 +6,10 @@ SYSTEM_PROMPT = """You are PizzaBot. (You will customize this.)"""
 if "messages" not in st.session_state:
     st.session_state.messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "assistant", "content": "Hi! I'm PizzaBot 🍕 How can I help you today?"}
+        {
+            "role": "assistant",
+            "content": "Hi! I'm PizzaBot 🍕 How can I help you today?",
+        },
     ]
 
 st.title("🍕 PizzaBot (Starter Version)")
@@ -16,9 +19,11 @@ with st.sidebar:
     st.subheader("Quick Ask (To Implement)")
     st.caption("Example: Pepperoni, Veggie, Spicy, Party Order")
 
+
 # TODO: Add fallback or LLM call here
 def generate_reply(messages):
     return "TODO: Add pizza recommendations here!"
+
 
 # Render conversation history
 for m in st.session_state.messages:

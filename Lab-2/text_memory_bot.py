@@ -1,6 +1,8 @@
 # app_text_chat.py
 import streamlit as st
-from utils import get_answer  # expects a function that accepts st.session_state.messages
+from utils import (
+    get_answer,  # expects a function that accepts st.session_state.messages
+)
 
 # --- Session state ---
 if "messages" not in st.session_state:
