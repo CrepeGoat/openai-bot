@@ -7,6 +7,7 @@ from streamlit_float import *
 # Float feature initialization
 float_init()
 
+
 def initialize_session_state():
     if "messages" not in st.session_state:
         st.session_state.messages = [
@@ -14,6 +15,7 @@ def initialize_session_state():
         ]
     # if "audio_initialized" not in st.session_state:
     #     st.session_state.audio_initialized = False
+
 
 initialize_session_state()
 
@@ -47,11 +49,13 @@ if st.session_state.messages[-1]["role"] != "assistant":
     with st.chat_message("assistant"):
         with st.spinner("Thinking🤔..."):
             final_response = get_answer(st.session_state.messages)
-        with st.spinner("Generating audio response..."):    
+        with st.spinner("Generating audio response..."):
             audio_file = text_to_speech(final_response)
             autoplay_audio(audio_file)
         st.write(final_response)
-        st.session_state.messages.append({"role": "assistant", "content": final_response})
+        st.session_state.messages.append(
+            {"role": "assistant", "content": final_response}
+        )
         os.remove(audio_file)
 
 # Float the footer container and provide CSS to target it with

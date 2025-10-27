@@ -18,16 +18,28 @@ Offer 2–3 options at different price points with short descriptions and stems 
 Be warm, concise, and practical. If out of scope, redirect kindly. Prices are estimates unless provided.
 Format: bullets for options; bold key items; keep replies under ~8 sentences unless the user asks for details."""
 
+
 # ---------------- Minimal fallback if no LLM is wired ----------------
 def fallback_answer(messages):
     """Very tiny rule-based demo so the app runs without external APIs."""
-    last = next((m["content"] for m in reversed(messages) if m["role"] == "user"), "").lower()
-    occasion = "anniversary" if "anniversary" in last else \
-               "birthday" if "birthday" in last else \
-               "sympathy" if "sympathy" in last else \
-               "wedding" if "wedding" in last else \
-               "graduation" if "graduation" in last else \
-               "valentine" if "valentine" in last else "special occasion"
+    last = next(
+        (m["content"] for m in reversed(messages) if m["role"] == "user"), ""
+    ).lower()
+    occasion = (
+        "anniversary"
+        if "anniversary" in last
+        else "birthday"
+        if "birthday" in last
+        else "sympathy"
+        if "sympathy" in last
+        else "wedding"
+        if "wedding" in last
+        else "graduation"
+        if "graduation" in last
+        else "valentine"
+        if "valentine" in last
+        else "special occasion"
+    )
 
     recs = {
         "anniversary": [
@@ -47,7 +59,10 @@ def fallback_answer(messages):
         ],
         "wedding": [
             ("**Bridal Bouquet** (~$120)", "white/ivory roses, ranunculus, greenery"),
-            ("**Bridesmaid Posy** (~$65)", "soft pink palette, spray roses, eucalyptus"),
+            (
+                "**Bridesmaid Posy** (~$65)",
+                "soft pink palette, spray roses, eucalyptus",
+            ),
             ("**Boutonnières** (~$18 each)", "mini rose, greenery"),
         ],
         "graduation": [
@@ -69,8 +84,11 @@ def fallback_answer(messages):
     lines = [f"Here are a few {occasion} ideas:"]
     for name, stems in recs.get(occasion, recs["special occasion"]):
         lines.append(f"- {name}: {stems}")
-    lines.append("Would you like to share **budget**, **colors**, **allergies**, and **delivery date/zip** so I can refine?")
+    lines.append(
+        "Would you like to share **budget**, **colors**, **allergies**, and **delivery date/zip** so I can refine?"
+    )
     return "\n".join(lines)
+
 
 def get_answer(messages):
     # Compose with system prompt at position 0 if not already present
@@ -80,11 +98,15 @@ def get_answer(messages):
         return llm_get_answer(messages)  # your existing LLM pipeline
     return fallback_answer(messages)
 
+
 # ---------------- Session state ----------------
 if "messages" not in st.session_state:
     st.session_state.messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "assistant", "content": "Hi! I’m **BloomBot** 🌸 What’s the occasion and budget?"}
+        {
+            "role": "assistant",
+            "content": "Hi! I’m **BloomBot** 🌸 What’s the occasion and budget?",
+        },
     ]
 
 st.title("🌸 BloomBot — Flower Shop Chatbot")
@@ -93,11 +115,26 @@ st.title("🌸 BloomBot — Flower Shop Chatbot")
 with st.sidebar:
     st.subheader("Quick Ask")
     if st.button("Birthday under $50"):
-        st.session_state.messages.append({"role": "user", "content": "I need a birthday bouquet under $50. Bright colors."})
+        st.session_state.messages.append(
+            {
+                "role": "user",
+                "content": "I need a birthday bouquet under $50. Bright colors.",
+            }
+        )
     if st.button("Anniversary (classic red)"):
-        st.session_state.messages.append({"role": "user", "content": "Anniversary bouquet, classic red roses. Delivery Friday to 80302."})
+        st.session_state.messages.append(
+            {
+                "role": "user",
+                "content": "Anniversary bouquet, classic red roses. Delivery Friday to 80302.",
+            }
+        )
     if st.button("Sympathy whites"):
-        st.session_state.messages.append({"role": "user", "content": "Sympathy arrangement in whites. Service on Tuesday."})
+        st.session_state.messages.append(
+            {
+                "role": "user",
+                "content": "Sympathy arrangement in whites. Service on Tuesday.",
+            }
+        )
     st.markdown("---")
     st.caption("Tip: Tell me occasion, budget, colors, allergies, delivery date & zip.")
 

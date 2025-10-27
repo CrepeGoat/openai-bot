@@ -1,8 +1,9 @@
 # simple_openai_chat_env.py
-import streamlit as st
-from openai import OpenAI
-from dotenv import load_dotenv
 import os
+
+import streamlit as st
+from dotenv import load_dotenv
+from openai import OpenAI
 
 # --- Load environment variables ---
 load_dotenv()
